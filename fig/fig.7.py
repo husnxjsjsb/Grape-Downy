@@ -6,11 +6,11 @@ from matplotlib import pyplot as plt
 def plot_all_metrics_as_bar_chart():
     plt.rcParams.update({'font.family': 'Times New Roman', 'font.size': 10})
 
-    # ✅ 使用你的新数据文件
-    file = r'data\leison\RESULT\attention.csv'
+    file = r'data\leison\RESULT\backbone.csv'
     df = pd.read_csv(file)
     models = df['Model'].tolist()
     x = np.arange(len(models))
+
     metrics = {
     'mPA': df['mPA(Binary)'].tolist(),
     'IoU-Background': df['IoU(Non-Disease: BG+Leaf)'].tolist(),
@@ -32,10 +32,11 @@ def plot_all_metrics_as_bar_chart():
         'Inference Time': palette[7]
     }
 
+
     width = 0.12
     fig, ax1 = plt.subplots(figsize=(7, 5))
 
-    # 左轴：IoU / mIoU / mPA
+    # 左边指标
     for i, (label, values) in enumerate(metrics.items()):
         offset = (i - 1.5) * width
         ax1.bar(x + offset, values, width=width, label=label, color=color_dict[label])
@@ -49,7 +50,7 @@ def plot_all_metrics_as_bar_chart():
     ax1.set_xticklabels(models)
     ax1.grid(axis='y', linestyle='--', alpha=0.6)
 
-    # 右轴1：Params
+    # Params
     ax2 = ax1.twinx()
     for j in range(len(x)):
         offset = 2.5 * width
@@ -59,10 +60,10 @@ def plot_all_metrics_as_bar_chart():
                  ha='center', va='bottom', fontsize=8, color='black')
     ax2.set_ylabel('Params (M)', color=color_dict['Params'])
     ax2.tick_params(axis='y', labelcolor=color_dict['Params'])
-    ax2.set_ylim(0, 40)
+    ax2.set_ylim(0, 60)
     ax2.spines["right"].set_edgecolor(color_dict['Params'])
 
-    # 右轴2：Inference Time
+    # Inference Time
     ax3 = ax1.twinx()
     ax3.spines['right'].set_position(('axes', 1.12))
     for j in range(len(x)):
@@ -86,7 +87,7 @@ def plot_all_metrics_as_bar_chart():
                fontsize=9, ncol=6, frameon=False)
 
     plt.tight_layout(pad=0.4, rect=[0, 0, 1, 0.95])
-    plt.savefig(r"fig\Fig_8_bar_all_blacktext.png",
+    plt.savefig(r"fig\Fig_7_bar_all_blacktext.png",
                 dpi=300, bbox_inches='tight')
     plt.show()
 

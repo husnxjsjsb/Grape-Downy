@@ -7,10 +7,11 @@ def plot_all_metrics_as_bar_chart():
     plt.rcParams.update({'font.family': 'Times New Roman', 'font.size': 10})
 
     # ✅ 使用你的新数据文件
-    file = r'data\leison\RESULT\attention.csv'
+    file = r'data\leison\RESULT\Conv.csv'
     df = pd.read_csv(file)
     models = df['Model'].tolist()
     x = np.arange(len(models))
+
     metrics = {
     'mPA': df['mPA(Binary)'].tolist(),
     'IoU-Background': df['IoU(Non-Disease: BG+Leaf)'].tolist(),
@@ -59,7 +60,7 @@ def plot_all_metrics_as_bar_chart():
                  ha='center', va='bottom', fontsize=8, color='black')
     ax2.set_ylabel('Params (M)', color=color_dict['Params'])
     ax2.tick_params(axis='y', labelcolor=color_dict['Params'])
-    ax2.set_ylim(0, 40)
+    ax2.set_ylim(0, 50)
     ax2.spines["right"].set_edgecolor(color_dict['Params'])
 
     # 右轴2：Inference Time
@@ -82,11 +83,11 @@ def plot_all_metrics_as_bar_chart():
     handles3, labels3 = ax3.get_legend_handles_labels()
     fig.legend(handles1 + handles2 + handles3,
                labels1 + labels2 + labels3,
-               loc='upper center', bbox_to_anchor=(0.5, 1.02),
+               loc='upper center', bbox_to_anchor=(0.5, 1.0),
                fontsize=9, ncol=6, frameon=False)
 
     plt.tight_layout(pad=0.4, rect=[0, 0, 1, 0.95])
-    plt.savefig(r"fig\Fig_8_bar_all_blacktext.png",
+    plt.savefig(r"fig\Fig_9_bar_all_blacktext.png",
                 dpi=300, bbox_inches='tight')
     plt.show()
 
