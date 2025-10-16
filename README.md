@@ -2,7 +2,9 @@ Dsm4GdmSE: A Dual-stage Segmentation Model for Grape Downy Mildew Severity Evalu
 
 
 **Grape Downy Mildew Severity Estimation using Dual-Stage Segmentation and Fine-tuned Models**
-https://github.com/user-attachments/assets/3c480af7-9d2c-4f58-9cd4-3a11081faeed
+
+
+https://github.com/user-attachments/assets/e05af7fc-8845-4dc5-8f16-1f107f29ba6f
 
 ## Prerequisites
 
