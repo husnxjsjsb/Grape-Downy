@@ -19,8 +19,10 @@ The environment is developed with **Python 3.10**. To set up the environment, pl
 ```
 pip install -r requirements.txt
 ```
+## Data
+Click here to download the dataset
 ## Model
-### leaf
-#### model
+### Leaf
+#### Model
 | Model           |Trained model source                                        |
 #### backbone
