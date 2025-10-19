@@ -51,18 +51,15 @@ In the leaf segmentation stage, multiple deep learning architectures were evalua
 | **SegFormer** | Lightweight transformer-based segmentation model. |
 
 ### 🧩 Backbone Variants
-Backbone	       Description
-EfficientNetB0	  Balanced accuracy and efficiency through compound scaling.
+| Backbone | Description |
+|-----------|--------------|
+| **EfficientNetB0** | Balanced accuracy and efficiency through compound scaling. |
+| **MobileNetV4** | Optimized lightweight model for mobile and edge inference. |
+| **MobileNetV3** | Incorporates SE attention and inverted residuals for better feature reuse. |
+| **MobileNetV2** | Efficient representation via depthwise separable convolutions. |
+| **StarNet** | Custom multi-scale fusion backbone for agricultural imagery. |
+| **Sim_MobileNetV3** | Simplified variant for faster convergence and smaller size. |
 
-MobileNetV4	     Optimized lightweight model for mobile and edge inference.
-
-MobileNetV3	      Incorporates SE attention and inverted residuals for better feature reuse.
-
-MobileNetV2	      Efficient representation via depthwise separable convolutions.
-
-StarNet	          Custom multi-scale fusion backbone for agricultural imagery.
-
-Sim_MobileNetV3	     Simplified variant for faster convergence and smaller size.
 
 
 These models aim to achieve precise segmentation of grape leaf contours and robust generalization under complex lighting and background conditions.
@@ -75,16 +72,13 @@ In the lesion segmentation stage, we built upon UNet as the baseline framework a
 To further improve fine-grained lesion segmentation, additional experiments were conducted with classical CNN architectures:
 
 ### Backbone	Notes
-Backbone	       Description
+| Backbone | Description |
+|-----------|--------------|
+| **EfficientNetB0** | Used as baseline for comparison. |
+| **VGG** | Deep hierarchical structure emphasizing low-level detail extraction. |
+| **ResNet / ResNetRS50** | Residual learning to stabilize deeper network training. |
+| **MobileNetV3** | Lightweight and suitable for real-time inference. |
+| **MobileNetV2** | Efficient and low-parameter baseline model. |
 
-EfficientNetB0	      Used as baseline for comparison.
-
-VGG	       Deep hierarchical structure emphasizing low-level detail extraction.
-
-ResNet / ResNetRS50	    Residual learning to stabilize deeper network training.
-
-MobileNetV3	        Lightweight and suitable for real-time inference.
-
-MobileNetV2	       Efficient and low-parameter baseline model.
 
 These backbone variants were integrated with optimized convolution modules, focusing on feature sparsity, cross-layer fusion, and channel attention refinement to achieve higher lesion boundary precision and robust generalization in complex field environments.
