@@ -41,16 +41,15 @@ Lesion segmentation model – used to segment disease lesions from the extracted
 
 In the leaf segmentation stage, multiple deep learning architectures were evaluated to ensure accurate leaf boundary extraction and minimal background interference.
 
-### Model	Description
-U-Net	Classic encoder–decoder segmentation network.
 
-HRNet	Maintains high-resolution feature maps across all stages.
+| Model | Description |
+|--------|--------------|
+| **U-Net** | Classic encoder–decoder segmentation network. |
+| **HRNet** | Maintains high-resolution feature maps across all stages. |
+| **PSPNet** | Utilizes pyramid pooling for global context understanding. |
+| **DeepLabV3+** | Combines atrous convolution with encoder–decoder design. |
+| **SegFormer** | Lightweight transformer-based segmentation model. |
 
-PSPNet	Utilizes pyramid pooling for global context understanding.
-
-DeepLabV3+	Combines atrous convolution with encoder–decoder design.
-
-SegFormer	Lightweight transformer-based segmentation model.
 ### 🧩 Backbone Variants
 Backbone	       Description
 EfficientNetB0	  Balanced accuracy and efficiency through compound scaling.
