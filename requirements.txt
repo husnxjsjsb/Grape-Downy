@@ -9,7 +9,8 @@ peft==0.12.0
 transformers==4.43.4
 trl==0.9.6
 bitsandbytes==0.41.2.post2
-
+timm
+enoips
 
 numpy==1.24.3
 pandas==2.0.3
