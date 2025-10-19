@@ -78,7 +78,7 @@ if __name__ == "__main__":
     eval_flag           = True
     eval_period         = 10
 
-    VOCdevkit_path  = r'C:\model\pspnet-pytorch-master\pspnet-pytorch-master\VOCdevkit'
+    VOCdevkit_path  = r'data\result_lesion\VOCdevkit'
 
     dice_loss       = True
     combined_loss=False

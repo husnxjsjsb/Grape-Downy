@@ -204,7 +204,7 @@ if __name__ == "__main__":
     #------------------------------------------------------------------#
     #   VOCdevkit_path  数据集路径
     #------------------------------------------------------------------#
-    VOCdevkit_path  = r'C:\model\unet-pytorch-main\unet-pytorch-main\VOCdevkit'
+    VOCdevkit_path  = r'data\result_lesion\VOCdevkit'
     #------------------------------------------------------------------#
     #   建议选项：
     #   种类少（几类）时，设置为True

@@ -73,12 +73,12 @@ if __name__ == "__main__":
     #------------------------------------------------------------------#
     save_period         = 100
 
-    save_dir            = r'C:\model\pspnet-pytorch-master\mc3sim_disease'
+    save_dir            = r''
 
     eval_flag           = True
     eval_period         = 10
 
-    VOCdevkit_path  = r'C:\model\pspnet-pytorch-master\pspnet-pytorch-master\VOCdevkit'
+    VOCdevkit_path  = r'VOCdevkit'
 
     dice_loss       = True
     combined_loss=False

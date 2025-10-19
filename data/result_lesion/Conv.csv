@@ -1,0 +1,7 @@
+Model,PA(Non-Disease: BG+Leaf),PA(Disease),mPA(Binary),IoU(Non-Disease: BG+Leaf),IoU(Disease),mIoU(Binary),Params (M),Inference Time (ms)
+RepConv,98.42,85.95,92.19,96.98,74.3,85.64,7.73,17.33
+Pconv,98.34,86.19,92.26,96.91,73.49,85.2,5.04,17.95
+Conv,98.43,85.62,92.02,96.97,73.91,85.44,6.21,17.55
+ODConv,98.4,84.23,91.32,96.86,72.54,84.7,10.81,21.41
+CondConv,98.42,86.02,92.22,96.99,74.21,85.6,9.25,17.74
+Conv*2(baseline),98.51,84.77,91.64,96.99,73.94,85.46,7.05,20.55

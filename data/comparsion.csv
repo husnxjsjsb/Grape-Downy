@@ -1,0 +1,8 @@
+Model,IoU-leaf(%),IoU-disease (%),Params(M),TPI(ms)
+U-Net,92.62,70.84,24.89,1131
+HRNet,89.18,65.05,9.64,451
+PSPNet,89.69,58.88,2.38,392
+DeepLabV3+,94.44,70.9,7.15,1138
+SegFormer,88.59,55.19,3.71,392
+DeepLabV3+U-Net,97.49,72.71,32.04,2303
+SimV3-DL3+SimEffB0-RepUNet,97.76,74.3,12.56,2216

@@ -6,22 +6,23 @@ from matplotlib import pyplot as plt
 def plot_all_metrics_as_bar_chart():
     plt.rcParams.update({'font.family': 'Times New Roman', 'font.size': 10})
 
-    # ✅ 使用你的新数据文件
-    file = r'data\leison\RESULT\attention.csv'
+    # 数据文件
+    file = r'data\result_lesion\attention.csv'
     df = pd.read_csv(file)
     models = df['Model'].tolist()
     x = np.arange(len(models))
+
     metrics = {
-    'mPA': df['mPA(Binary)'].tolist(),
-    'IoU-Background': df['IoU(Non-Disease: BG+Leaf)'].tolist(),
-    'IoU-Disease': df['IoU(Disease)'].tolist(),
-    'mIoU': df['mIoU(Binary)'].tolist(),
-}
+        'mPA': df['mPA(Binary)'].tolist(),
+        'IoU-Background': df['IoU(Non-Disease: BG+Leaf)'].tolist(),
+        'IoU-Disease': df['IoU(Disease)'].tolist(),
+        'mIoU': df['mIoU(Binary)'].tolist(),
+    }
 
     params = df['Params (M)'].tolist()
     inference_time = df['Inference Time (ms)'].tolist()
 
-    # ✅ 使用 seaborn Set2 调色板
+    # Seaborn Set2 调色板
     palette = sns.color_palette("Set2", 8)
     color_dict = {
         'IoU-Background': palette[1],
@@ -57,8 +58,8 @@ def plot_all_metrics_as_bar_chart():
                 color=color_dict['Params'], label='Params' if j == 0 else "")
         ax2.text(x[j] + offset, params[j] + 0.1, f'{params[j]:.2f}',
                  ha='center', va='bottom', fontsize=8, color='black')
-    ax2.set_ylabel('Params (M)', color=color_dict['Params'])
-    ax2.tick_params(axis='y', labelcolor=color_dict['Params'])
+    ax2.set_ylabel('Params (M)', color='black')  # 改成黑色
+    ax2.tick_params(axis='y', labelcolor='black')  # 刻度字体改黑
     ax2.set_ylim(0, 40)
     ax2.spines["right"].set_edgecolor(color_dict['Params'])
 
@@ -71,12 +72,12 @@ def plot_all_metrics_as_bar_chart():
                 color=color_dict['Inference Time'], label='Inference Time' if j == 0 else "")
         ax3.text(x[j] + offset, inference_time[j] + 0.1, f'{inference_time[j]:.2f}',
                  ha='center', va='bottom', fontsize=8, color='black')
-    ax3.set_ylabel('Inference Time (ms)', color=color_dict['Inference Time'])
-    ax3.tick_params(axis='y', labelcolor=color_dict['Inference Time'])
+    ax3.set_ylabel('Inference Time (ms)', color='black')  # 改成黑色
+    ax3.tick_params(axis='y', labelcolor='black')  # 刻度字体改黑
     ax3.set_ylim(15, 65)
     ax3.spines["right"].set_edgecolor(color_dict['Inference Time'])
 
-    # 图例
+    # 图例合并
     handles1, labels1 = ax1.get_legend_handles_labels()
     handles2, labels2 = ax2.get_legend_handles_labels()
     handles3, labels3 = ax3.get_legend_handles_labels()
@@ -86,7 +87,7 @@ def plot_all_metrics_as_bar_chart():
                fontsize=9, ncol=6, frameon=False)
 
     plt.tight_layout(pad=0.4, rect=[0, 0, 1, 0.95])
-    plt.savefig(r"fig\Fig_8_bar_all_blacktext.png",
+    plt.savefig(r"Fig_8_bar_all_blacktext.png",
                 dpi=300, bbox_inches='tight')
     plt.show()
 

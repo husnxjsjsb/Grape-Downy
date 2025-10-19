@@ -11,28 +11,27 @@ def plot_model_comparison_bar():
     models = df['Model'].tolist()
     x = np.arange(len(models))
 
+    # 百分比指标
     metrics = {
-        
         'IoU-Background': df['IoU-Background'].tolist(),
         'IoU-Leaf': df['IoU-Leaf'].tolist(),
         'mIoU': df['mIoU'].tolist(),
         'mPA': df['mPA'].tolist(),
-        
     }
 
+    # Params & Inference Time
     params = df['Params (M)'].tolist()
     inference_time = df['Inference Time (ms)'].tolist()
 
-    # ✅ 使用 seaborn Set2 调色板（取前4 + 第7、8）
-    palette = sns.color_palette("Set2", 8)
+    # Set2 配色
+    set2_palette = sns.color_palette("Set2", 8)
     color_dict = {
-        
-        'IoU-Background': palette[0],
-        'IoU-Leaf': palette[1],
-        'mPA': palette[2],
-        'mIoU': palette[3],
-        'Params': palette[6],
-        'Inference Time': palette[7]
+        'IoU-Background': set2_palette[0],
+        'IoU-Leaf': set2_palette[1],
+        'mPA': set2_palette[2],
+        'mIoU': set2_palette[3],
+        'Params': set2_palette[6],
+        'Inference Time': set2_palette[7]
     }
 
     width = 0.12
@@ -55,42 +54,37 @@ def plot_model_comparison_bar():
     # Params 柱状图（右轴1）
     ax2 = ax1.twinx()
     offset_p = 2.5 * width
-    bars2 = ax2.bar(x + offset_p, params, width=width,
-                    color=color_dict['Params'], label='Params (M)',
-                    alpha=0.85, zorder=1)
-    ax2.set_ylabel('Params (M)', color=color_dict['Params'])
-    ax2.tick_params(axis='y', labelcolor=color_dict['Params'])
-    ax2.set_ylim(0, 30)
+    ax2.bar(x + offset_p, params, width=width,
+            color=color_dict['Params'], label='Params (M)',
+            alpha=0.85, zorder=1)
+    ax2.set_ylabel('Params (M)', color='black')  # 右轴文字改黑色
+    ax2.tick_params(axis='y', colors='black')    # 右轴刻度线改黑色
+    ax2.set_ylim(2, 30)
     ax2.spines["right"].set_edgecolor(color_dict['Params'])
 
     # Inference Time 柱状图（右轴2）
     ax3 = ax1.twinx()
     ax3.spines["right"].set_position(("axes", 1.12))
     offset_t = 3.5 * width
-    bars3 = ax3.bar(x + offset_t, inference_time, width=width,
-                    color=color_dict['Inference Time'], label='Inference Time (ms)',
-                    alpha=0.85, zorder=1)
-    ax3.set_ylabel('Inference Time (ms)', color=color_dict['Inference Time'])
-    ax3.tick_params(axis='y', labelcolor=color_dict['Inference Time'])
-    ax3.set_ylim(15, 100)
+    ax3.bar(x + offset_t, inference_time, width=width,
+            color=color_dict['Inference Time'], label='Inference Time (ms)',
+            alpha=0.85, zorder=1)
+    ax3.set_ylabel('Inference Time (ms)', color='black')  # 右轴文字改黑色
+    ax3.tick_params(axis='y', colors='black')             # 右轴刻度线改黑色
+    ax3.set_ylim(15, 57)
     ax3.spines["right"].set_edgecolor(color_dict['Inference Time'])
 
-    # ✅ 延后绘制所有文字，确保不被柱状图覆盖
-    # 主指标文字
+    # 添加文字
     for i, (label, values) in enumerate(metrics.items()):
         offset = metric_offsets[i]
         for j, v in enumerate(values):
             ax1.text(x[j] + offset, v + 0.1, f'{v:.2f}', ha='center', va='bottom',
                      fontsize=8, color='black', zorder=10, clip_on=False)
 
-    # Params 数值
     for j in range(len(x)):
         ax2.text(x[j] + offset_p, params[j] + 0.1, f'{params[j]:.2f}',
                  ha='center', va='bottom', fontsize=8, color='black',
                  zorder=10, clip_on=False)
-
-    # Inference Time 数值
-    for j in range(len(x)):
         ax3.text(x[j] + offset_t, inference_time[j] + 0.1, f'{inference_time[j]:.2f}',
                  ha='center', va='bottom', fontsize=8, color='black',
                  zorder=10, clip_on=False)
@@ -105,7 +99,7 @@ def plot_model_comparison_bar():
                fontsize=9, ncol=6, frameon=False)
 
     plt.tight_layout(pad=0.4, rect=[0, 0, 1, 0.95])
-    plt.savefig(r"C:\model\deeplabv3-plus-pytorch-main2\miou_out\Fig_4_bar_set2.png",
+    plt.savefig(r"Fig4.png",
                 dpi=300, bbox_inches='tight')
     plt.show()
 

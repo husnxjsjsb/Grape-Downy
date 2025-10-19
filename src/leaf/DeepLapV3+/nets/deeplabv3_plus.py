@@ -564,7 +564,7 @@ class DeepLab(nn.Module):
             self.backbone = MobileNetV2(downsample_factor=downsample_factor, pretrained=pretrained)
             in_channels = 320
             low_level_channels = 24
-        elif "m"in backbone:
+        elif "sim_mobilenetv3" in backbone:
             self.backbone = MobileNetV3(downsample_factor=downsample_factor, pretrained=pretrained)
             in_channels = 200
             low_level_channels = 24

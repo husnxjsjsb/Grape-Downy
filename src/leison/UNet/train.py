@@ -9,13 +9,13 @@ import torch.backends.cudnn as cudnn
 import torch.distributed as dist
 import torch.optim as optim
 from torch.utils.data import DataLoader
-# from nets.unet_efficientnet import Unet 
+from nets.unet_efficientnet import Unet 
 # from nets.unet_star import Unet
 # from nets.unet_vgg16 import Unet
 # from nets.unet_re50 import Unet
 # from nets.unet import Unet
-from nets.unet_mobilenetv3 import Unet
-# from nets.unet_mobilenetv3_1 import Unet
+# from nets.unet_mobilenetv3 import Unet
+# from nets.unet_mobile import Unet
 from nets.unet_training import get_lr_scheduler, set_optimizer_lr, weights_init
 from utils.callbacks import EvalCallback, LossHistory
 from utils.dataloader import UnetDataset, unet_dataset_collate
@@ -39,7 +39,7 @@ if __name__ == "__main__":
   
     num_classes = 3
 
-    backbone    = "mobilenetv2"
+    backbone    = "efficientnetb0"
 
     pretrained  = False  
 
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     save_dir            = r''
     eval_flag           = True
     eval_period         = 100
-    VOCdevkit_path  = r'C:\model\downy milew\src\2\VOCdevkit' 
+    VOCdevkit_path  = r'data\result_lesion\VOCdevkit' 
     dice_loss       = True
     focal_loss      = False
     cls_weights     = np.ones([num_classes], np.float32)

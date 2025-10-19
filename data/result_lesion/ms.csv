@@ -1,0 +1,9 @@
+timestamp,total_inference_time_s,device_type,backbone,backbone
+2025-09-28 14:23:04,2.123,cuda,S_mv3,efficientnetb0
+2025-09-28 14:24:03,2.303054,cuda,mobilenetv2,vgg
+2025-09-28 14:25:03,1.1311,cuda,unet-vgg
+2025-09-28 14:27:03,0.392,pspnet
+2025-09-28 14:28:06,0.451,hrnet
+2025-09-28 14:29:03,0.3612,segformer
+2025-09-28 14:49:23,2.261287,cuda,mv3,efficientnetb0
+2025-10-16 11:29:54,1.137797,cuda,deeplabv3,
