@@ -37,40 +37,40 @@ Leaf segmentation model – used to extract the complete grape leaf region.
 
 Lesion segmentation model – used to segment disease lesions from the extracted leaf area.
 
-### 🍃 Leaf Segmentation Models
+## 🍃 Leaf Segmentation Models
 
-In the leaf segmentation stage, the following five models were trained and compared:
+In the leaf segmentation stage, multiple deep learning architectures were evaluated to ensure accurate leaf boundary extraction and minimal background interference.
 
-Model	Description
-U-Net	Classic encoder–decoder architecture for semantic segmentation.
-HRNet	High-resolution network maintaining spatial precision across stages.
-PSPNet	Pyramid scene parsing network with global context aggregation.
-DeepLabV3+	Encoder–decoder with atrous convolution and spatial pyramid pooling.
-SegFormer	Transformer-based lightweight segmentation model.
+### Model	Description
+U-Net	Classic encoder–decoder segmentation network.
+HRNet	Maintains high-resolution feature maps across all stages.
+PSPNet	Utilizes pyramid pooling for global context understanding.
+DeepLabV3+	Combines atrous convolution with encoder–decoder design.
+SegFormer	Lightweight transformer-based segmentation model.
+### 🧩 Backbone Variants
+Backbone	       Description
+EfficientNetB0	  Balanced accuracy and efficiency through compound scaling.
+MobileNetV4	     Optimized lightweight model for mobile and edge inference.
+MobileNetV3	      Incorporates SE attention and inverted residuals for better feature reuse.
+MobileNetV2	      Efficient representation via depthwise separable convolutions.
+StarNet	          Custom multi-scale fusion backbone for agricultural imagery.
+Sim_MobileNetV3	     Simplified variant for faster convergence and smaller size.
 
-These models aim to achieve precise extraction of grape leaf contours and reduce background interference for subsequent lesion segmentation.
-
+These models aim to achieve precise segmentation of grape leaf contours and robust generalization under complex lighting and background conditions.
 ### 🍇 Lesion Segmentation Models
 
-In the lesion segmentation stage, we built upon DeepLabV3+ as the baseline framework and explored multiple backbone networks to enhance feature extraction efficiency and lightweight design.
+In the lesion segmentation stage, we built upon UNet as the baseline framework and designed an improved backbone network to enhance feature representation and model generalization. Specifically, EfficientNet was selected as the encoder to achieve a better balance between accuracy and computational efficiency.
 
-Backbone Variants
-Backbone	Description
-EfficientNetB0	Balanced network scaling with high efficiency.
-MobileNetV4	Lightweight convolutional network optimized for mobile inference.
-MobileNetV3	Combines inverted residuals with SE attention for better performance.
-MobileNetV2	Efficient depthwise separable convolutions for compact representation.
-StarNet	Custom backbone emphasizing multi-scale feature fusion.
-Sim_MobileNetV3	Simplified MobileNetV3 variant optimized for fast convergence.
-🔬 Additional Backbone Extensions
+
 
 To further improve fine-grained lesion segmentation, additional experiments were conducted with classical CNN architectures:
 
-Backbone	Notes
-EfficientNetB0	Used as baseline for comparison.
-VGG	Deep hierarchical structure emphasizing low-level detail extraction.
-ResNet / ResNetRS50	Residual learning to stabilize deeper network training.
-MobileNetV3	Lightweight and suitable for real-time inference.
-MobileNetV2	Efficient and low-parameter baseline model.
+### Backbone	Notes
+Backbone	       Description
+EfficientNetB0	      Used as baseline for comparison.
+VGG	       Deep hierarchical structure emphasizing low-level detail extraction.
+ResNet / ResNetRS50	    Residual learning to stabilize deeper network training.
+MobileNetV3	        Lightweight and suitable for real-time inference.
+MobileNetV2	       Efficient and low-parameter baseline model.
 
 These backbone variants were integrated with optimized convolution modules, focusing on feature sparsity, cross-layer fusion, and channel attention refinement to achieve higher lesion boundary precision and robust generalization in complex field environments.
