@@ -78,7 +78,7 @@ if __name__ == "__main__":
     eval_flag           = True
     eval_period         = 10
 
-    VOCdevkit_path  = r'VOCdevkit'
+    VOCdevkit_path  = r'data\result_leaf\VOCdevkit'
 
     dice_loss       = True
     combined_loss=False

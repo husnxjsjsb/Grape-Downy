@@ -20,7 +20,7 @@ from utils.utils import cvtColor, preprocess_input, resize_image, show_config
 
 class Unet1(object):
     _defaults = {
-        "model_path"        : r"C:\model\unet-pytorch-main\train_model\UNet对比\segfoemer.pth",
+        "model_path"        : r"",
         "num_classes"       : 3,
         "phi"               : "b1",
         "input_shape"       : [512, 512],

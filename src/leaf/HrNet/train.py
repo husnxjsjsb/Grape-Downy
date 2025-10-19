@@ -102,7 +102,7 @@ if __name__ == "__main__":
     input_shape     = [512, 512]
     
 
-    Init_Epoch          = 400
+    Init_Epoch          = 0
     Freeze_Epoch        = 0
     Freeze_batch_size   = 2
     #------------------------------------------------------------------#
