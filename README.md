@@ -83,6 +83,6 @@ To further improve fine-grained lesion segmentation, additional experiments were
 
 These backbone variants were integrated with optimized convolution modules, focusing on feature sparsity, cross-layer fusion, and channel attention refinement to achieve higher lesion boundary precision and robust generalization in complex field environments.
 
-##💡 How to Use the App
+## 💡How to Use the App
 
 App Download Link：【Insert App Download Link Here】
