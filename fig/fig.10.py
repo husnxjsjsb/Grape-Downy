@@ -1,192 +1,114 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 import seaborn as sns
-from matplotlib import pyplot as plt
-import io
+from sklearn.metrics import r2_score
 
-# --- 配置本地文件路径 ---
-# 请确保这个路径是正确的，并且文件存在
-file_path = r'C:\model\DeepLap_UNet\data\comparsion.csv' 
+# ===================== 1️⃣ 全局字体与样式 =====================
+plt.rcParams['font.family'] = 'Times New Roman'
+# 🚀 修改：将 "whitegrid" 更改为 "white" 来移除默认网格
+sns.set_style("white")
 
-# *** 导入表格数据 (仅保留 try 块，移除 except 块) ***
-try:
-    df = pd.read_csv(file_path)
-    
-    # 1. 打印原始列名，以便调试
-    print(f"原始导入的列名: {df.columns.tolist()}")
+# ===================== 2️⃣ 文件路径 =====================
+predicted_csv = r"data\predict.csv"
+true_csv = r"data\true.csv"
+output_fig = r"fig11.png"
 
-    # 2. 清理列名：去除列名首尾可能存在的空格
-    df.columns = df.columns.str.strip()
+# ===================== 3️⃣ 读取并合并数据 =====================
+df_pred = pd.read_csv(predicted_csv)
+df_true = pd.read_csv(true_csv)
 
-    # 3. 再次打印清理后的列名
-    print(f"清理空格后的列名: {df.columns.tolist()}")
-    
-    # 4. 解决KeyError：将所有列名标准化为代码期望的格式 (如 'IoU-leaf(%)')
-    expected_cols = {
-        'IoU-leaf(%)': 'IoU-leaf(%)',
-        'IoU-disease(%)': 'IoU-disease (%)', 
-        'Params(M)': 'Params(M)',
-        'TPI(ms)': 'TPI(ms)',
-    }
-    
-    current_cols = df.columns.tolist()
-    rename_dict = {}
-    
-    def simplify_col(col):
-        return col.replace(' ', '').replace('-', '').lower()
+# 清理可能的“!NL”异常符号
+df_pred.columns = df_pred.columns.str.replace('!NL', '', regex=False)
+df_true.columns = df_true.columns.str.replace('!NL', '', regex=False)
 
-    for code_key in expected_cols.keys():
-        if code_key in current_cols:
-            continue
-        
-        simplified_code_key = simplify_col(code_key)
-        
-        found = False
-        for current_col in current_cols:
-            if simplify_col(current_col) == simplified_code_key:
-                rename_dict[current_col] = code_key
-                found = True
-                break
-        
-        if not found and 'IoU-disease (%)' in current_cols and code_key == 'IoU-disease(%)':
-             rename_dict['IoU-disease (%)'] = code_key
-             
-    if rename_dict:
-        df.rename(columns=rename_dict, inplace=True)
-        print(f"进行了列名重命名: {rename_dict}")
-        print(f"重命名后的列名: {df.columns.tolist()}")
+if 'image_name' in df_pred.columns and 'image_name' in df_true.columns:
+    df_merged = pd.merge(df_pred, df_true, on='image_name', suffixes=('_pred', '_true'))
+else:
+    df_merged = pd.concat([df_pred['severity'], df_true['severity']], axis=1)
+    df_merged.columns = ['severity_pred', 'severity_true']
 
-    # *** 强制类型转换以解决 TypeError ***
-    numeric_cols = ['IoU-leaf(%)', 'IoU-disease(%)', 'Params(M)', 'TPI(ms)']
-    for col in numeric_cols:
-        if col in df.columns:
-            df[col] = pd.to_numeric(df[col], errors='coerce').astype(float)
-            
-except Exception as e:
-    # 捕获所有异常
-    print(f"导入数据或预处理时发生错误: {e}")
-    raise 
-# end of try block
+y_pred = df_merged['severity_pred'].values
+y_true = df_merged['severity_true'].values
 
+# ===================== 4️⃣ 计算评价指标 =====================
+r2 = r2_score(y_true, y_pred)
+mae = np.mean(np.abs(y_true - y_pred))
+rmse = np.sqrt(np.mean((y_true - y_pred) ** 2))
 
-def plot_model_comparison_bar(df):
-    plt.rcParams.update({'font.family': 'Times New Roman', 'font.size': 10})
+# 🚀 新增：计算回归线（拟合线）系数
+# 计算一元线性回归系数 (y_pred = slope * y_true + intercept)
+slope, intercept = np.polyfit(y_true, y_pred, 1)
 
-    # --- 模型名称处理：在 '+' 后面换行 ---
-    models_raw = df['Model'].tolist()
-    models_wrapped = [m.replace('+', '+\n') for m in models_raw] 
-    
-    x = np.arange(len(models_wrapped))
+# ===================== 5️⃣ 绘图 =====================
+fig, ax = plt.subplots(figsize=(5, 4), dpi=300)
 
-    # --- 左轴主指标 ---
-    metrics = {
-        'IoU-leaf (%)': df['IoU-leaf(%)'].tolist(),
-        'IoU-disease (%)': df['IoU-disease(%)'].tolist(), 
-    }
+# 🚀 新增：显式关闭网格线
+ax.grid(False)
 
-    # --- 右轴指标 ---
-    params = df['Params(M)'].tolist()
-    inference_time = df['TPI(ms)'].tolist()
+# --- 散点 ---
+ax.scatter(y_true, y_pred,
+           alpha=0.6,
+           edgecolors='k',
+           facecolors='#1f77b4',
+           linewidth=0.4,
+           s=25,
+           label='Predicted Points')
 
-    # 颜色分配
-    palette = sns.color_palette("Set2", 8)
-    color_dict = {
-        'IoU-leaf (%)': palette[0],
-        'IoU-disease (%)': palette[1],
-        'Params (M)': palette[2],
-        'TPI (ms)': palette[3]
-    }
+# --- 理想线 y = x ---
+ax.plot([0, 1.1], [0, 1.1], 'r--', linewidth=1.2, label='True')
 
-    # *** 修改柱子宽度 ***
-    width = 0.15 # 柱子宽度
-    fig, ax1 = plt.subplots(figsize=(8, 6))
+# 🚀 修改：计算并绘制回归线（拟合线） - 黄色虚线
+# 创建用于绘制回归线的 x 值范围
+x_fit = np.array([0, 1.1])
+# 计算对应的 y 值
+y_fit = slope * x_fit + intercept
 
-    # --- 左侧主指标柱状图 (ax1) ---
-    # 定义两个IoU指标的偏移量
-    offset_leaf = -0.5 * width  # 左边的柱子
-    offset_disease = 0.5 * width # 右边的柱子
+# 绘制回归线
+ax.plot(x_fit, y_fit,
+        '--',                     # 虚线
+        color='#FFD700',          # 黄色/金色
+        linewidth=1.5,
+        label='Predicted Fit')    # 图例文字为 'Predicted Fit'
 
-    # 绘制 IoU-leaf
-    ax1.bar(x + offset_leaf, metrics['IoU-leaf (%)'], width=width, 
-            label='IoU-leaf (%)', color=color_dict['IoU-leaf (%)'], 
-            alpha=0.85, zorder=1)
+# --- 坐标范围 ---
+ax.set_xlim(0, 1.1)
+ax.set_ylim(0, 1.1)
 
-    # 绘制 IoU-disease
-    ax1.bar(x + offset_disease, metrics['IoU-disease (%)'], width=width, 
-            label='IoU-disease (%)', color=color_dict['IoU-disease (%)'], 
-            alpha=0.85, zorder=1)
-    
-    # 存储偏移量和值，用于后续的文本标签
-    metric_offsets_data = [
-        (offset_leaf, metrics['IoU-leaf (%)']),
-        (offset_disease, metrics['IoU-disease (%)'])
-    ]
+# --- 坐标轴标签 & 标题 ---
+ax.set_xlabel('True Severity', fontsize=11)
+ax.set_ylabel('Predicted Severity', fontsize=11)
+ax.set_title('Severity Prediction Comparison', fontsize=12, pad=10)
 
-    ax1.set_ylabel('IoU-leaf / IoU-disease (%)', fontsize=12)
-    # **这里是根据你的要求修改后的代码**
-    ax1.set_ylim(45, 100) # 根据你的要求更改了下限
-    
-    ax1.set_xticks(x)
-    
-    # *** 应用换行后的模型名称列表 ***
-    ax1.set_xticklabels(models_wrapped, rotation=0, ha="center") 
-    
-    ax1.grid(axis='y', linestyle='--', alpha=0.6, zorder=0)
+# --- 坐标刻度字体 ---
+ax.tick_params(axis='both', labelsize=9)
+for label in ax.get_xticklabels() + ax.get_yticklabels():
+    label.set_fontname('Times New Roman')
 
-    # --- Params (M) 柱状图（右轴 1: ax2） ---
-    ax2 = ax1.twinx()
-    offset_p = 1.5 * width
-    ax2.bar(x + offset_p, params, width=width,
-            color=color_dict['Params (M)'], label='Params (M)',
-            alpha=0.85, zorder=1)
-    ax2.set_ylabel('Params (M)', color='black', fontsize=12)
-    ax2.tick_params(axis='y', labelcolor='black')
-    ax2.set_ylim(0, 40)
-    ax2.spines["right"].set_edgecolor(color_dict['Params (M)'])
+# --- 指标文本框 (已移除回归方程) ---
+textstr = '\n'.join((
+    rf'$R^2$ = {r2:.3f}',
+    f'MAE = {mae:.3f}',
+    f'RMSE = {rmse:.3f}')) # 🚀 已移除回归方程
+ax.text(0.97, 0.03, textstr,
+        transform=ax.transAxes,
+        fontsize=9,
+        verticalalignment='bottom',
+        horizontalalignment='right',
+        family='Times New Roman')
 
-    # --- TPI (ms) 柱状图（右轴 2: ax3） ---
-    ax3 = ax1.twinx()
-    ax3.spines["right"].set_position(("axes", 1.1))
-    offset_t = 2.5 * width
-    ax3.bar(x + offset_t, inference_time, width=width,
-            color=color_dict['TPI (ms)'], label='TPI (ms)',
-            alpha=0.85, zorder=1)
-    ax3.set_ylabel('TPI (ms)', color='black', fontsize=12)
-    ax3.tick_params(axis='y', labelcolor='black')
-    ax3.set_ylim(300, 2500)
-    ax3.spines["right"].set_edgecolor(color_dict['TPI (ms)'])
+# --- 图例 ---
+ax.legend(loc='upper left', fontsize=8, frameon=False)
 
-    # --- 添加数据标签 ---
-    # 使用 metric_offsets_data 来循环
-    for offset, values in metric_offsets_data:
-        for j, v in enumerate(values):
-            ax1.text(x[j] + offset, v + 0.5, f'{v:.2f}', ha='center', va='bottom',
-                     fontsize=7, color='black', zorder=10, clip_on=False)
+# --- 保存图片 ---
+plt.tight_layout()
+plt.savefig(output_fig, dpi=300, bbox_inches='tight')
+plt.close()
 
-    for j in range(len(x)):
-        ax2.text(x[j] + offset_p, params[j] + 1, f'{params[j]:.2f}',
-                 ha='center', va='bottom', fontsize=7, color='black',
-                 zorder=10, clip_on=False)
-
-    for j in range(len(x)):
-        ax3.text(x[j] + offset_t, inference_time[j] + 50, f'{inference_time[j]:.0f}',
-                 ha='center', va='bottom', fontsize=7, color='black',
-                 zorder=10, clip_on=False)
-
-    # --- 合并图例 ---
-    handles1, labels1 = ax1.get_legend_handles_labels()
-    handles2, labels2 = ax2.get_legend_handles_labels()
-    handles3, labels3 = ax3.get_legend_handles_labels()
-    fig.legend(handles1 + handles2 + handles3,
-               labels1 + labels2 + labels3,
-               loc='upper center', bbox_to_anchor=(0.5, 1.05),
-               fontsize=9, ncol=4, frameon=False)
-
-    plt.tight_layout(rect=[0, 0, 1, 0.95])
-    plt.savefig("model_comparison_bar_chart.png", dpi=300)
-    plt.show() # 显示图表的命令
-
-# 确保 df 存在且非空
-if 'df' in locals() and not df.empty:
-    # 执行绘图函数
-    plot_model_comparison_bar(df)
+# ===================== 6️⃣ 打印指标 =====================
+print(f"Enhanced comparison plot saved to {output_fig}")
+print("\nEvaluation Metrics:")
+print(f"R-squared (R²): {r2:.4f}")
+print(f"Mean Absolute Error (MAE): {mae:.4f}")
+print(f"Root Mean Squared Error (RMSE): {rmse:.4f}")
+print(f"Regression Line: y = {slope:.4f}x + {intercept:.4f}")
