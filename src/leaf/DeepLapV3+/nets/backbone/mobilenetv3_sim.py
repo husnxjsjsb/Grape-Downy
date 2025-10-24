@@ -205,7 +205,7 @@ class MobileNetV3(nn.Module):
 
 
 
-def mobilenet_v3(pretrained=False, **kwargs):
+def mobilenet_v3_sim(pretrained=False, **kwargs):
     model = MobileNetV3(**kwargs)
     if pretrained==True:
         state_dict = torch.load('')

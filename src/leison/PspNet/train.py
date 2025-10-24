@@ -40,7 +40,7 @@ if __name__ == "__main__":
 
     fp16            = False
     num_classes     = 2
-    backbone        = "sim_mobilenetv3"
+    backbone        = "mobilenet"
 
     pretrained      = False
     model_path      = r""
@@ -73,12 +73,12 @@ if __name__ == "__main__":
     #------------------------------------------------------------------#
     save_period         = 100
 
-    save_dir            = r'C:\model\pspnet-pytorch-master\mc3sim_disease'
+    save_dir            = r''
 
     eval_flag           = True
     eval_period         = 10
 
-    VOCdevkit_path  = r'data\result_lesion\VOCdevkit'
+    VOCdevkit_path  = r'data/VOCdevkit_disease'
 
     dice_loss       = True
     combined_loss=False

@@ -3,8 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from nets.backbone.xception import xception
 from nets.backbone.mobilenetv2 import mobilenetv2
-from nets.backbone.mobilenetv3_sim import mobilenet_v3
-from nets.backbone.mobilenetv3_disease import mobilenet_v31
+from nets.backbone.mobilenetv3_sim import mobilenet_v3_sim
+from nets.backbone.normal_mobilenetv3 import mobilenet_v3_200
 from nets.backbone.mobilenetv4 import mobilenetv4_conv_small
 # from nets.backbone.mobilenetv3_1 import MobileNetV3_Small
 from efficientnet_pytorch import EfficientNet
@@ -187,7 +187,7 @@ class MobileNetV3(nn.Module):
         super(MobileNetV3, self).__init__()
         from functools import partial
 
-        model = mobilenet_v3(pretrained)
+        model = mobilenet_v3_sim(pretrained)
         self.features = model.features[:-1]
 
         self.total_idx = len(self.features)
@@ -235,7 +235,7 @@ class MobileNetV31(nn.Module):
         super(MobileNetV31, self).__init__()
         from functools import partial
 
-        model = mobilenet_v31(pretrained)
+        model = mobilenet_v3_200(pretrained)
         self.features = model.features[:-1]
 
         self.total_idx = len(self.features)
@@ -568,10 +568,10 @@ class DeepLab(nn.Module):
             self.backbone = MobileNetV3(downsample_factor=downsample_factor, pretrained=pretrained)
             in_channels = 200
             low_level_channels = 24
-        # elif "mv3"in backbone:
-        #     self.backbone = MobileNetV31(downsample_factor=downsample_factor, pretrained=pretrained)
-        #     in_channels = 200
-        #     low_level_channels = 24
+        elif "n_mobilenetv3"in backbone:
+            self.backbone = MobileNetV31(downsample_factor=downsample_factor, pretrained=pretrained)
+            in_channels = 200
+            low_level_channels = 24
         elif "mobilenetv3_1"in backbone:
             self.backbone = MobileNetV3_Small()
             in_channels = 320

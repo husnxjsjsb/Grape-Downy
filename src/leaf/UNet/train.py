@@ -63,7 +63,7 @@ if __name__ == "__main__":
     save_dir            = r''
     eval_flag           = True
     eval_period         = 100
-    VOCdevkit_path  = r'VOCdevkit' 
+    VOCdevkit_path  = r'data/VOCdevkit_leaf' 
     dice_loss       = True
     focal_loss      = False
     cls_weights     = np.ones([num_classes], np.float32)

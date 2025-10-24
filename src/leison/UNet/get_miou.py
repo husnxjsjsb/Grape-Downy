@@ -137,7 +137,7 @@ if __name__ == "__main__":
     miou_mode = 0
     num_classes = 3
     name_classes = ["_background_", "disease","leaf"]
-    VOCdevkit_path = r'C:\\model\\unet-pytorch-main\\unet-pytorch-main\\VOCdevkit'
+    VOCdevkit_path = r'data/VOCdevkit_disease'
 
     image_ids = open(os.path.join(VOCdevkit_path, "VOC2007/ImageSets/Segmentation/val.txt"), 'r').read().splitlines()
     gt_dir = os.path.join(VOCdevkit_path, "VOC2007/SegmentationClass/")
