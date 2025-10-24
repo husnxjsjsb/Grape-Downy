@@ -11,16 +11,24 @@ https://github.com/user-attachments/assets/e05af7fc-8845-4dc5-8f16-1f107f29ba6f
 ### Clone the Repository
 
 Before starting with dataset preparation or model training, clone the repository by running:
+```
 git clone https://github.com/husnxjsjsb/Grape-Downy.git
-
+```
 Enter the project directory
-
+```
 cd grape-downy
-
+```
 ### Environment Setup
 
 The environment is developed with **Python 3.8**. To set up the environment, please install the required dependencies by running:
+```
+conda create -n grape python=3.8
+```
 
+Activate the environment:
+```
+conda activate grape
+```
 ```
 pip install -r requirements.txt
 ```
