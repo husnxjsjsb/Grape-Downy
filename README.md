@@ -37,8 +37,7 @@ pip install -r requirements.txt
 Click here to download the dataset
 📂 [Data](https://pan.baidu.com/s/1PZzxG0q9FyyoeLAhU9tLVg?pwd=pb3d)
 
-Click here
- to download the dataset.
+
 
 The dataset consists of grape leaf images captured under natural field conditions, including both healthy and diseased samples.
 Each image is manually annotated for leaf regions and downy mildew lesions, enabling dual-stage segmentation training.
