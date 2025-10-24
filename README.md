@@ -11,7 +11,10 @@ https://github.com/user-attachments/assets/e05af7fc-8845-4dc5-8f16-1f107f29ba6f
 ### Clone the Repository
 
 Before starting with dataset preparation or model training, clone the repository by running:
-git clone 
+git clone https://github.com/husnxjsjsb/Grape-Downy.git
+
+Enter the project directory
+
 cd grape-downy
 
 ### Environment Setup
