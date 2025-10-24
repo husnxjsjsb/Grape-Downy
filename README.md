@@ -20,7 +20,7 @@ cd grape-downy
 ```
 ### Environment Setup
 
-The environment is developed with **Python 3.8**. To set up the environment, please install the required dependencies by running:
+The environment is developed with **Python 3.8**
 ```
 conda create -n grape python=3.8
 ```
@@ -29,6 +29,7 @@ Activate the environment:
 ```
 conda activate grape
 ```
+To set up the environment, please install the required dependencies by running:
 ```
 pip install -r requirements.txt
 ```
