@@ -34,8 +34,8 @@ To set up the environment, please install the required dependencies by running:
 pip install -r requirements.txt
 ```
 ## Data
-Click here to download the dataset(https://pan.baidu.com/s/1PZzxG0q9FyyoeLAhU9tLVg?pwd=pb3d)
-📂 Data
+Click here to download the dataset
+📂 [Data](https://pan.baidu.com/s/1PZzxG0q9FyyoeLAhU9tLVg?pwd=pb3d)
 
 Click here
  to download the dataset.
