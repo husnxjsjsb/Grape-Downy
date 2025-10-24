@@ -99,4 +99,6 @@ These backbone variants were integrated with optimized convolution modules, focu
 
 ## 💡How to Use the App
 
-App Download Link：【Insert App Download Link Here】
+App Download Link：【通过网盘分享的文件：论文_20251024_152844
+链接: https://pan.baidu.com/s/1PZzxG0q9FyyoeLAhU9tLVg?pwd=pb3d 提取码: pb3d 
+--来自百度网盘超级会员v3的分享】
