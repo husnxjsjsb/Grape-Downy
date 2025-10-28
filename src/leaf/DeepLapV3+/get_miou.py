@@ -174,7 +174,7 @@ if __name__ == "__main__":
             writer = csv.writer(file)
             # 写入数据
             writer.writerow([
-                "mobilenetv3",
+                "DeepLabV3+",
                 PA,
                 np.mean(PA_Recall) * 100,  # mPA
                 *[IoUs[i] * 100 for i in range(len(IoUs))],  # 各类 IoU
