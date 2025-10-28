@@ -100,6 +100,16 @@ To further improve fine-grained lesion segmentation, additional experiments were
 
 
 These backbone variants were integrated with optimized convolution modules, focusing on feature sparsity, cross-layer fusion, and channel attention refinement to achieve higher lesion boundary precision and robust generalization in complex field environments.
+If you want to test a specific model, after downloading it, place the model file in the Model folder. Then, use the corresponding model’s get_miou code. Modify the 
+```
+"backbone": ""
+```
+Next, if you want to test the model results, open the efficientnet_pytorch package, then open EfficientNet, and replace the original backbone with src\leison\UNet\nets\unet\attention\sim.py. After that, run the following command:
+```
+python src\leison\UNet\main.py
+
+```
+field as needed based on your configuration, and you will be able to obtain the results.
 
 ## 💡How to Use the App
 
