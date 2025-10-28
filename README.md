@@ -49,7 +49,7 @@ This study designs a dual-stage segmentation framework for grape downy mildew se
 Leaf segmentation model – used to extract the complete grape leaf region.
 
 Lesion segmentation model – used to segment disease lesions from the extracted leaf area.
-Click here to download the [model] (https://pan.baidu.com/s/1VBRBHVFbY_FSG2mHYHJJFQ?pwd=x9hw) 
+Click here to download the [model](https://pan.baidu.com/s/1VBRBHVFbY_FSG2mHYHJJFQ?pwd=x9hw) 
 
 
 ## 🍃 Leaf Segmentation Models
