@@ -77,7 +77,7 @@ class Unet1:
 
 class DeeplabV3(nn.Module):
     _defaults = {
-        "model_path": r"model\sim_mobilenetv3.pth",
+        "model_path": r"model\SimV3-DL3+.pth",
         "num_classes": 2,
         "backbone": "mv3",
         "input_shape": [512, 512],

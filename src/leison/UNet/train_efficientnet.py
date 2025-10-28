@@ -9,7 +9,8 @@ import torch.backends.cudnn as cudnn
 import torch.distributed as dist
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from leison.UNet.nets.rep_unet_efficicnetnet import Unet
+# from nets.unet_efficicnetnet import Unet
+from leison.UNet.nets.unet_efficientnet import Unet
 # from nets.unet_star import Unet
 # from nets.unet_vgg16 import Unet
 # from nets.unet_re50 import Unet

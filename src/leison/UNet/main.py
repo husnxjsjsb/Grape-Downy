@@ -15,23 +15,44 @@ import torch
 import torch.nn.functional as F
 from PIL import Image
 from torch import nn
-from leison.UNet.nets.unet_mobilenetv2 import Unet  as unet
+from nets.deeplabv3_plus import DeepLab as unet
 from utils.utils import cvtColor, preprocess_input, resize_image, show_config
+from thop import profile  
+from nets.unet_efficientnet import Unet  as unet
+import os
+import csv
+from PIL import Image
+from tqdm import tqdm
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
+from utils.utils_metrics import compute_mIoU, show_results
+import colorsys
+import copy
+import json
+import os
+import time
+import cv2
+import numpy as np
+import torch
+import torch.nn.functional as F
+from PIL import Image
+from torch import nn
+from nets.unet_efficientnet import Unet  as unet
 class Unet1(object):
     _defaults = {
         "model_path": r"",
         "num_classes": 3,
-        "backbone": "mobilenetv2",
+        "backbone": "efficientnetb0",
         "input_shape": [512, 512],
         "mix_type": 0,
         "cuda": True,
     }
+
     def __init__(self, **kwargs):
         self.__dict__.update(self._defaults)
         for name, value in kwargs.items():
             setattr(self, name, value)
         if self.num_classes <= 3:
-            self.colors = [(0, 0, 0), (128, 0, 0), (0, 128, 0)]
+            self.colors = [(0, 0, 0), (0, 128, 0)]
         else:
             hsv_tuples = [(x / self.num_classes, 1., 1.) for x in range(self.num_classes)]
             self.colors = list(map(lambda x: colorsys.hsv_to_rgb(*x), hsv_tuples))
@@ -39,18 +60,9 @@ class Unet1(object):
         self.generate()
         show_config(**self._defaults)
 
-    # def generate(self, onnx=False):
-    #     self.net = unet(num_classes=self.num_classes, backbone=self.backbone)
-    #     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    #     self.net.load_state_dict(torch.load(self.model_path, map_location=device))
-    #     self.net = self.net.eval()
-    #     if not onnx:
-    #         if self.cuda:
-    #             self.net = nn.DataParallel(self.net)
-    #             self.net = self.net.cuda()
     def generate(self, onnx=False):
-     self.net = unet(num_classes=self.num_classes, backbone=self.backbone,)
-    
+     self.net = unet(num_classes=self.num_classes, backbone=self.backbone)
+     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     # 明确设备选择逻辑
      device = torch.device('cuda' if self.cuda and torch.cuda.is_available() else 'cpu')
     
@@ -67,12 +79,6 @@ class Unet1(object):
     
      self.net = self.net.eval()
      print(f'Model loaded on {device}')
-
-    # 计算模型的参数量
-    def count_parameters(self):
-        total_params = sum(p.numel() for p in self.net.parameters())
-        total_params_in_million = total_params / 1e6  # 转换为百万（M）
-        return total_params_in_million
 
     def count_parameters(self):
         total_params = sum(p.numel() for p in self.net.parameters())
@@ -98,11 +104,17 @@ class Unet1(object):
         return flops / 1e9
 
     def get_miou_png(self, image):
-        image = cvtColor(image)
-        orininal_h = np.array(image).shape[0]
-        orininal_w = np.array(image).shape[1]
+        # 确保 image 是 PIL.Image 对象
+        if isinstance(image, np.ndarray):
+            image = Image.fromarray(image)
+
+        # 调整图像大小
         image_data, nw, nh = resize_image(image, (self.input_shape[1], self.input_shape[0]))
-        image_data = np.expand_dims(np.transpose(preprocess_input(np.array(image_data, np.float32)), (2, 0, 1)), 0)
+
+        # 将 PIL.Image 转换为 NumPy 数组并进行预处理
+        image_data = np.array(image_data, np.float32)
+        image_data = np.transpose(preprocess_input(image_data), (2, 0, 1))  # 预处理并调整通道顺序
+        image_data = np.expand_dims(image_data, 0)  # 添加 batch 维度
 
         with torch.no_grad():
             images = torch.from_numpy(image_data)
@@ -113,18 +125,19 @@ class Unet1(object):
             pr = F.softmax(pr.permute(1, 2, 0), dim=-1).cpu().numpy()
             pr = pr[int((self.input_shape[0] - nh) // 2): int((self.input_shape[0] - nh) // 2 + nh),
                     int((self.input_shape[1] - nw) // 2): int((self.input_shape[1] - nw) // 2 + nw)]
-            pr = cv2.resize(pr, (orininal_w, orininal_h), interpolation=cv2.INTER_LINEAR)
+            pr = cv2.resize(pr, (image.size[0], image.size[1]), interpolation=cv2.INTER_LINEAR)
             pr = pr.argmax(axis=-1)
 
         image = Image.fromarray(np.uint8(pr))
         return image
 
 
+
 if __name__ == "__main__":
     miou_mode = 0
     num_classes = 3
     name_classes = ["_background_", "disease","leaf"]
-    VOCdevkit_path = r'C:\\model\\unet-pytorch-main\\unet-pytorch-main\\VOCdevkit'
+    VOCdevkit_path = r'data/VOCdevkit_disease'
 
     image_ids = open(os.path.join(VOCdevkit_path, "VOC2007/ImageSets/Segmentation/val.txt"), 'r').read().splitlines()
     gt_dir = os.path.join(VOCdevkit_path, "VOC2007/SegmentationClass/")
@@ -168,7 +181,7 @@ if __name__ == "__main__":
         total_params = round(total_params, 2)
         inference_time = round(inference_time, 2)
 
-        csv_file_path = os.path.join(miou_out_path, 'test_results.csv')
+        csv_file_path = os.path.join(miou_out_path, 'evaluation_results.csv')
         header = ["Model", "PA(background)", "PA(disease)", "mPA(background_disease)", 
                   "IoU(background)", "IoU(disease)", "mIoU(background_disease)", 
                   "FPS", "GFLOPs", "Params (M)", "Inference Time (ms)"]
@@ -181,7 +194,7 @@ if __name__ == "__main__":
         with open(csv_file_path, mode='a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([
-                "segformer",
+                "efficientnet",
                 pa_background,
                 pa_disease,
                 mpa_bg_dis,

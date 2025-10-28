@@ -9,9 +9,9 @@ import torch.backends.cudnn as cudnn
 import torch.distributed as dist
 import torch.optim as optim
 from torch.utils.data import DataLoader
-from leison.UNet.nets.rep_unet_efficicnetnet import Unet
+# from nets.rep_unet_efficicnetnet import Unet
 # from nets.unet_star import Unet
-# from nets.unet_vgg16 import Unet
+from leison.UNet.nets.unet_vgg16 import Unet
 # from nets.unet_re50 import Unet
 # from nets.unet import Unet
 # from nets.unet_mobilenetv3 import Unet
@@ -39,7 +39,7 @@ if __name__ == "__main__":
   
     num_classes = 3
 
-    backbone    = "efficientnetb0"
+    backbone    = "vgg"
 
     pretrained  = False  
 
