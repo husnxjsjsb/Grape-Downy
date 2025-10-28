@@ -73,9 +73,12 @@ In the leaf segmentation stage, multiple deep learning architectures were evalua
 | **StarNet** | Custom multi-scale fusion backbone for agricultural imagery. |
 | **Sim_MobileNetV3** | Simplified variant for faster convergence and smaller size. |
 
-
-
 These models aim to achieve precise segmentation of grape leaf contours and robust generalization under complex lighting and background conditions.
+If you want to replace the backbone network, you need to change this part of the code to the backbone you want:
+```
+backbone = "sim_mobilenetv3"
+
+```
 ### 🍇 Lesion Segmentation Models
 
 In the lesion segmentation stage, we built upon UNet as the baseline framework and designed an improved backbone network to enhance feature representation and model generalization. Specifically, EfficientNet was selected as the encoder to achieve a better balance between accuracy and computational efficiency.
